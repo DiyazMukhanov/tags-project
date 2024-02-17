@@ -1,0 +1,11 @@
+.paper {
+    background-color: var(--color-white);
+}
+
+.medium {
+    border-radius: 12px;
+}
+
+.large {
+    border-radius: 16px;
+}
