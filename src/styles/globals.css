@@ -11,4 +11,5 @@ body {
   font-family: var(--brand-font);
   overflow-x: hidden;
   transition: all 2s;
+  height: 100%;
 }

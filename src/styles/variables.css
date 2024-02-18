@@ -8,7 +8,8 @@
     --color-dark-blue: #6E85F7;
     --color-purple: #C47DE8;
     --color-grey: #999999;
+    --color-light-grey: #EDEDED;
 
-    --brand-font: "SF Pro Display", "Muller", -apple-system, "BlinkMacSystemFont", Segoe UI, "Roboto", Oxygen,
+    --brand-font: "SF Pro Display", -apple-system, "Muller", "BlinkMacSystemFont", Segoe UI, "Roboto", Oxygen,
         Ubuntu, "Cantarell", Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }

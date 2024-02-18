@@ -1,1 +1,1 @@
-export { default } from '../../layouts/TagsList'
+export { default } from '../layouts/TagsList/index'
