@@ -1,0 +1,22 @@
+.row {
+    border-bottom: solid var(--color-light-grey) 1px;
+}
+
+.tagContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 24px;
+}
+
+.row th,
+.row td {
+    height: 65px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
