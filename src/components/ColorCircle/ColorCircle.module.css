@@ -1,0 +1,24 @@
+.circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+/* .circleBlock {
+    border: solid red 1px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+.chosenContainer {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: solid 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

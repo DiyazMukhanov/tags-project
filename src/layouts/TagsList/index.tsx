@@ -8,8 +8,14 @@ import { TagCollection } from "./TagCollection";
 import { Modal } from "@/UI/Modal";
 import { useState } from "react";
 import { usePosition } from "@/utils/hooks/usePosition";
+import { TagsSettings } from "@/components/TagsSettings";
+import { getTagsList } from "@/utils/getTagsList";
+import { TagType } from "@/types/TagType";
+// import { TAGS } from "@/utils/tags";
+import { useSelector, useDispatch } from 'react-redux';
+import { addTag, deleteTag, updateTag, addTagToCollection } from '../../store/slices/tagsSlice';
 
-const tableHeaders = [
+const TABLEHEADERS = [
     {
         title: 'ID',
         id: 1,
@@ -27,34 +33,44 @@ const tableHeaders = [
     }
 ]
 
-const ITEMS = [
-    {
-        id: 123450,
-        tagIds: [1, 2, 3]
-    },
-    {
-        id: 123451,
-        tagIds: [1, 2, 3, 4, 5]
-    },
-    {
-        id: 123452,
-        tagIds: [1, 2, 3, 4, 5]
-    },
-    {
-        id: 123453,
-        tagIds: [1, 2, 3, 4,]
-    },
-    {
-        id: 123454,
-        tagIds: [1, 2]
-    },
-]
+// const ITEMS = [
+//     {
+//         id: 123450,
+//         tagIds: [1, 2, 3]
+//     },
+//     {
+//         id: 123451,
+//         tagIds: [1, 2, 3, 4, 5]
+//     },
+//     {
+//         id: 123452,
+//         tagIds: [1, 2, 3, 4, 5]
+//     },
+//     {
+//         id: 123453,
+//         tagIds: [1, 2, 3, 4,]
+//     },
+//     {
+//         id: 123454,
+//         tagIds: [1, 2]
+//     },
+// ]
 
 export default function TagsList() {
     const { position, setPosition, onMouseEventHandler } = usePosition()
+    const [tags, setTags] = useState<TagType[]>(null)
+    // const [tagsList, setTagsList] = useState(TAGS)
+    // const [tagItems, setTagItems] = useState(ITEMS)
+    const [currentTagsCollectionId, setCurrentTagsCollectionId] = useState(null)
+    const dispatch = useDispatch();
+    const tagsList = useSelector(state => state.tags.tags);
+    const collections = useSelector(state => state.tags.collections);
 
-    const onTagClickHandler = (event: React.MouseEvent) => {
+    const onTagClickHandler = (event: React.MouseEvent, ids, collectionId) => {
+        let tags = getTagsList(tagsList, ids)
+        setTags(tags)
         onMouseEventHandler(event)
+        setCurrentTagsCollectionId(collectionId)
     }
 
     return (
@@ -64,13 +80,19 @@ export default function TagsList() {
                 onClose={() => setPosition(null)}
                 position={position}
             >
-                Some modal text
+                <TagsSettings
+                    tagsList={tagsList}
+                    tags={tags}
+                    setTags={setTags}
+                    collections={collections}
+                    currentTagsCollectionId={currentTagsCollectionId}
+                />
             </Modal>
             <Paper radius="large" className={styles.container}>
                 <table className={styles.table}>
                     <thead>
                         <tr className={styles.row}>
-                            {tableHeaders.map(header => (
+                            {TABLEHEADERS.map(header => (
                                 <th className={classNames(
                                     styles.tableHeader,
                                     styles[header.width]
@@ -80,8 +102,8 @@ export default function TagsList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {ITEMS.map(item => (
-                            <TagCollection key={item.id} collectionItem={item} onClick={onTagClickHandler} />
+                        {collections.map(collection => (
+                            <TagCollection key={collection.id} collectionItem={collection} onClick={(e) => onTagClickHandler(e, collection.tagIds, collection.id)} />
                         ))}
                     </tbody>
                 </table>

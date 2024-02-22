@@ -1,22 +1,35 @@
 .tag {
     border-radius: 6px;
-    height: 40px;
     width: fit-content;
     padding: 0 12px 0 12px;
     color: var(--color-white);
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 2px;
     cursor: pointer;
+    font-size: 14px;
+}
+
+.children {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.small {
+    height: 25px;
+}
+
+.large {
+    height: 40px;
 }
 
 .content {
-
     display: inline-block;
     text-align: center;
     white-space: nowrap;
-
-
 }
 
 .short {

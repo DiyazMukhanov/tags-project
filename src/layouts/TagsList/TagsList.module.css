@@ -14,7 +14,6 @@
     margin-top: 8px;
 }
 
-.row th,
 .row td {
     height: 65px;
     text-align: center;
@@ -32,6 +31,9 @@
     font-weight: 400;
     line-height: 14.32px;
     color: var(--color-grey);
+    text-align: left;
+    height: 65px;
+    padding-left: 30px;
 }
 
 .row {

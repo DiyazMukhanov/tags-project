@@ -6,16 +6,20 @@ type Props = {
     color: string
     children?: ReactNode
     text: string
-    isShort: boolean
+    isShort?: boolean
+    size: 'small' | 'large'
+    id: number
     onMouseEnter?: MouseEventHandler<HTMLDivElement>
     onMouseLeave?: MouseEventHandler<HTMLDivElement>
+    onClick?: MouseEventHandler<HTMLDivElement>
 }
 
-export default function Tag({ color, children, text, isShort, onMouseEnter, onMouseLeave, onClick }: Props) {
+export default function Tag({ color, children, text, isShort, size, onMouseEnter, onMouseLeave, onClick, id }: Props) {
     return (
         <div
             className={classNames(
                 styles.tag,
+                styles[size]
             )
             }
             onMouseEnter={onMouseEnter}
@@ -24,6 +28,7 @@ export default function Tag({ color, children, text, isShort, onMouseEnter, onMo
             style={{
                 backgroundColor: color
             }}
+            key={id}
         >
             <div
                 className={classNames(
@@ -32,6 +37,8 @@ export default function Tag({ color, children, text, isShort, onMouseEnter, onMo
                 }
             >
                 {text}
+            </div>
+            <div className={styles.children}>
                 {children}
             </div>
         </div>
