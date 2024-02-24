@@ -9,7 +9,7 @@ type Position = {
 
 type Props = {
     children: React.ReactNode;
-    className: string;
+    className?: string;
     onClose: () => void;
     position?: Position | null
 }

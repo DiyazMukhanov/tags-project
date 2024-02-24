@@ -51,3 +51,12 @@
     line-height: 14.32px;
     cursor: pointer;
 }
+
+.outerCircle {
+    position: absolute;
+    z-index: 2;
+    width: 23px;
+    height: 23px;
+    border-radius: 100%;
+    border: solid 2px;
+}

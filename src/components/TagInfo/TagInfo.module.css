@@ -1,8 +1,7 @@
 .tagInfo {
-    width: 210px;
+    width: 230px;
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: center; */
     align-items: center;
     gap: 8px;
     box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.18);

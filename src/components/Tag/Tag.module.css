@@ -37,36 +37,3 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-/* 
-.red {
-    background-color: var(--color-red);
-}
-
-.orange {
-    background-color: var(--color-orange);
-}
-
-.yellow {
-    background-color: var(--color-yellow);
-}
-
-.green {
-    background-color: var(--color-green);
-}
-
-.blue {
-    background-color: var(--color-blue);
-}
-
-.darkBlue {
-    background-color: var(--color-dark-blue);
-}
-
-.purple {
-    background-color: var(--color-purple);
-}
-
-.grey {
-    background-color: var(--color-grey);
-} */

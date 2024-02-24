@@ -4,8 +4,9 @@ import { ColorCircle } from "../ColorCircle";
 import { useEffect, useState } from "react";
 import Garbage from './../../../public/icons/garbage.svg';
 import Image from 'next/image';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deleteTag, updateTag } from '../../store/slices/tagsSlice';
+import { createPortal } from "react-dom";
 
 const colors = [
     {
@@ -42,25 +43,27 @@ const colors = [
     },
 ]
 
-export const TagEdit = ({ tag }) => {
+export const TagEdit = ({ tag, setPosition }) => {
     const dispatch = useDispatch();
     const [chosenId, setChosenId] = useState<number | null>(null)
     const [etitableTag, setEditableTag] = useState(tag)
     const [currentColor, setCurrentColor] = useState(etitableTag?.color)
     const [name, setName] = useState(etitableTag?.name)
+    const [circlePosition, setCirclePosition] = useState(null)
 
     useEffect(() => {
         updateTaghandler(name)
     }, [name, currentColor])
 
-    const circleClickHandler = (id: number) => {
-        setChosenId(id)
-        const color = colors.find(color => color.id === id)
-        setCurrentColor(color.color)
-    }
+    // const circleClickHandler = (id: number) => {
+    //     setChosenId(id)
+    //     const color = colors.find(color => color.id === id)
+    //     setCurrentColor(color.color)
+    // }
 
     const deleteTagHandler = (tagId) => {
         dispatch(deleteTag(tagId))
+        setPosition(null)
     }
 
     const onNameInputChangeHandler = (event) => {
@@ -72,8 +75,21 @@ export const TagEdit = ({ tag }) => {
         dispatch(updateTag({ id: etitableTag.id, name: name, color: currentColor }))
     }
 
+    const onCircleClickHandler = (event: React.MouseEvent, color) => {
+        setCurrentColor(color)
+
+        const hoveredElement = event.currentTarget as HTMLElement
+        setCirclePosition({
+            top: hoveredElement.getBoundingClientRect().top + window.scrollY - 3.2,
+            left: hoveredElement.getBoundingClientRect().left + window.scrollX - 3.2,
+        });
+    };
+
     return (
         <Paper radius="medium" className={styles.container}>
+            {circlePosition && createPortal(<div className={styles.outerCircle}
+                style={{ top: circlePosition?.top, left: circlePosition?.left, borderColor: currentColor }}></div>, document.body)}
+
             <div className={styles.nameBlock}>
                 <label>Имя</label>
                 <input
@@ -89,10 +105,10 @@ export const TagEdit = ({ tag }) => {
                 <div className={styles.colorsContainer}>
                     {colors.map(color =>
                         <ColorCircle
-                            chosen={chosenId === color.id && true}
+                            // chosen={chosenId === color.id && true}
                             color={color.color}
-                            id={color.id}
-                            onClick={() => circleClickHandler(color.id)}
+                            // id={color.id}
+                            onClick={(e) => onCircleClickHandler(e, color.color)}
                             key={color.id}
                         />
                     )}

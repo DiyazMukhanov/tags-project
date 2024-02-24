@@ -1,19 +1,16 @@
-import { Tooltip } from "@/UI/Tooltip";
 import { Paper } from "../../UI/Paper/index";
-import Tag from "../../components/Tag/index";
 import styles from './TagsList.module.css';
 import classNames from "classnames";
-import { TagInfo } from "@/components/TagInfo";
 import { TagCollection } from "./TagCollection";
 import { Modal } from "@/UI/Modal";
 import { useState } from "react";
 import { usePosition } from "@/utils/hooks/usePosition";
 import { TagsSettings } from "@/components/TagsSettings";
 import { getTagsList } from "@/utils/getTagsList";
-import { TagType } from "@/types/TagType";
-// import { TAGS } from "@/utils/tags";
-import { useSelector, useDispatch } from 'react-redux';
-import { addTag, deleteTag, updateTag, addTagToCollection } from '../../store/slices/tagsSlice';
+import { TagInterface } from "@/store/slices/sliceTypes";
+import { RootState } from "@/store/slices/sliceTypes";
+
+import { useSelector } from 'react-redux';
 
 const TABLEHEADERS = [
     {
@@ -33,40 +30,14 @@ const TABLEHEADERS = [
     }
 ]
 
-// const ITEMS = [
-//     {
-//         id: 123450,
-//         tagIds: [1, 2, 3]
-//     },
-//     {
-//         id: 123451,
-//         tagIds: [1, 2, 3, 4, 5]
-//     },
-//     {
-//         id: 123452,
-//         tagIds: [1, 2, 3, 4, 5]
-//     },
-//     {
-//         id: 123453,
-//         tagIds: [1, 2, 3, 4,]
-//     },
-//     {
-//         id: 123454,
-//         tagIds: [1, 2]
-//     },
-// ]
-
 export default function TagsList() {
     const { position, setPosition, onMouseEventHandler } = usePosition()
-    const [tags, setTags] = useState<TagType[]>(null)
-    // const [tagsList, setTagsList] = useState(TAGS)
-    // const [tagItems, setTagItems] = useState(ITEMS)
-    const [currentTagsCollectionId, setCurrentTagsCollectionId] = useState(null)
-    const dispatch = useDispatch();
-    const tagsList = useSelector(state => state.tags.tags);
-    const collections = useSelector(state => state.tags.collections);
+    const [tags, setTags] = useState<TagInterface[] | null>(null)
+    const [currentTagsCollectionId, setCurrentTagsCollectionId] = useState<number | null>(null)
+    const tagsList = useSelector((state: RootState) => state.tags.tags);
+    const collections = useSelector((state: RootState) => state.tags.collections);
 
-    const onTagClickHandler = (event: React.MouseEvent, ids, collectionId) => {
+    const onTagClickHandler = (event: React.MouseEvent, ids: number[], collectionId: number) => {
         let tags = getTagsList(tagsList, ids)
         setTags(tags)
         onMouseEventHandler(event)
@@ -81,10 +52,9 @@ export default function TagsList() {
                 position={position}
             >
                 <TagsSettings
-                    tagsList={tagsList}
+                    // tagsList={tagsList}
                     tags={tags}
                     setTags={setTags}
-                    collections={collections}
                     currentTagsCollectionId={currentTagsCollectionId}
                 />
             </Modal>

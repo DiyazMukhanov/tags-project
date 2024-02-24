@@ -8,7 +8,7 @@ type Props = {
         onMouseEnter: (event: React.MouseEvent) => void,
         onMouseLeave: () => void,
     ) => JSX.Element
-    className: string
+    className?: string
 };
 
 export function Tooltip({ children, content }: Props) {

@@ -55,6 +55,10 @@
     cursor: pointer;
 }
 
+/* .sixDots {
+    cursor: pointer;
+} */
+
 .invisibleInput {
     background-color: transparent;
     border: none;
