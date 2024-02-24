@@ -52,7 +52,6 @@ export default function TagsList() {
                 position={position}
             >
                 <TagsSettings
-                    // tagsList={tagsList}
                     tags={tags}
                     setTags={setTags}
                     currentTagsCollectionId={currentTagsCollectionId}

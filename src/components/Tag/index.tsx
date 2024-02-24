@@ -38,9 +38,10 @@ export default function Tag({ color, children, text, isShort, size, onMouseEnter
             >
                 {text}
             </div>
-            <div className={styles.children}>
+            {children && <div className={styles.children}>
                 {children}
-            </div>
+            </div>}
+
         </div>
     )
 }

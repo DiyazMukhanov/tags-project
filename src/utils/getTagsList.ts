@@ -1,4 +1,6 @@
-export const getTagsList = (tags, ids) => {
+import { TagInterface } from "@/store/slices/sliceTypes"
+
+export const getTagsList = (tags: TagInterface[], ids: number[]) => {
     let tagsList = []
 
     for (let i = 0; i < ids.length; i++) {

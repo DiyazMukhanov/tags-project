@@ -1,4 +1,11 @@
 .dndBlock {
     display: flex;
     gap: 16px;
+    align-items: center;
+}
+
+.icon {
+    height: 33px;
+    display: flex;
+    align-items: center;
 }

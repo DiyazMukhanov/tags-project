@@ -15,6 +15,10 @@
     vertical-align: middle;
 }
 
+.itemId {
+    font-size: 14px;
+}
+
 .container {
     display: flex;
     align-items: center;
@@ -26,4 +30,7 @@
     font-weight: 700;
     color: var(--color-grey);
     cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }

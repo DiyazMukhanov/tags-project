@@ -1,11 +1,19 @@
 import { DndContext, useDraggable, useDroppable, PointerSensor, useSensor, MouseSensor } from '@dnd-kit/core';
 import styles from './DraggableDroppable.module.css';
+import { TagInterface } from '@/store/slices/sliceTypes';
+import { ReactNode } from 'react';
 
-export const DraggableDroppableTag = ({ tag, children, icon }) => {
+type Props = {
+    tag: TagInterface
+    children: ReactNode
+    icon: ReactNode
+}
+
+export const DraggableDroppableTag = ({ tag, children, icon }: Props) => {
     const { attributes, listeners, setNodeRef: setDragNodeRef, transform } = useDraggable({ id: tag.id.toString() });
     const { setNodeRef: setDropNodeRef } = useDroppable({ id: tag.id.toString() });
 
-    const setNodeRefs = (node) => {
+    const setNodeRefs = (node: HTMLElement | null) => {
         setDragNodeRef(node);
         setDropNodeRef(node);
     };
@@ -16,7 +24,7 @@ export const DraggableDroppableTag = ({ tag, children, icon }) => {
 
     return (
         <div ref={setNodeRefs} style={style} className={styles.dndBlock}>
-            <div {...listeners} {...attributes} style={{ cursor: 'grab' }}>{icon}</div>
+            <div {...listeners} {...attributes} style={{ cursor: 'grab' }} className={styles.icon}>{icon}</div>
             {children}
         </div>
     );

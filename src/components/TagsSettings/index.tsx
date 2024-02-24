@@ -2,7 +2,6 @@ import { Paper } from '@/UI/Paper';
 import styles from './TagsSettings.module.css';
 import Tag from '../Tag';
 import { TagInterface, RootState } from '@/store/slices/sliceTypes';
-import { CollectionInterface } from '@/store/slices/sliceTypes';
 import Image from 'next/image';
 import CancelButton from '../../../public/icons/closeTag.svg';
 import SixDots from './../../../public/icons/sixDots.svg';
@@ -15,22 +14,17 @@ import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTagsList } from "@/utils/getTagsList";
 import { addTag, addTagToCollection, removeTagFromCollection, moveTagOrder } from '../../store/slices/tagsSlice';
-import { DndContext, DragEndEvent, useSensor, PointerSensor, MouseSensor } from '@dnd-kit/core';
+import { DndContext, useSensor, PointerSensor, MouseSensor } from '@dnd-kit/core';
+import { DragEndEvent } from '@dnd-kit/core';
 import { DraggableDroppableTag } from '@/UI/DraggableDroppable';
-import { SixDotsGrabber } from '@/UI/SixDotsGrabber';
+import { Position } from '@/types/position';
 
 type Props = {
     tags: TagInterface[] | null
-    // tagsList: CollectionInterface[] | null
     currentTagsCollectionId: number | null
     setTags: (tags: TagInterface[]) => void
-    // setTagsList: (tags: TagInterface[]) => void
 }
 
-type Position = {
-    top: number
-    left: number
-}
 
 const getTagById = (tags: TagInterface[], tagId: number) => {
     const tag = tags.filter(tag => tag.id === tagId)
@@ -47,7 +41,6 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
 
     const ACTIVATION_CONSTRAINTS = {
         delay: 10,
-        // distance: 10,
         tolerance: 5
     }
     const sensors = [useSensor(PointerSensor, {
@@ -57,17 +50,16 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
     })];
 
 
-    const handleDragEnd = (event) => {
+    const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
+        const activeId = active.id.toString()
 
         if (over && active.id !== over.id) {
-            const oldIndex = tagsList.findIndex(tag => tag.id.toString() === active.id);
             const newIndex = tagsList.findIndex(tag => tag.id.toString() === over.id);
 
-            dispatch(moveTagOrder({ id: parseInt(active.id), newOrder: newIndex + 1 }));
+            dispatch(moveTagOrder({ id: parseInt(activeId), newOrder: newIndex + 1 }));
         }
 
-        // setActiveId(null);
     }
 
     useEffect(() => {
@@ -120,8 +112,8 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
             <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
                 <Paper className={styles.container} radius='medium'>
                     <div className={styles.top}>
-                        {tags.map(tag => (
-                            <Tag size='small' text={tag.name} color={tag.color} isShort={true} key={tag.id}>
+                        {tags && tags.map(tag => (
+                            <Tag size='small' text={tag.name} color={tag.color} isShort={true} id={tag.id}>
                                 <Image
                                     priority
                                     src={CancelButton}
@@ -168,12 +160,10 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
                                         className={styles.sixDots}
                                     />}>
                                         <div className={styles.tagNameBlock}>
-
-
-                                            <Tag text={tag?.name} color={tag?.color} onClick={() => addTagHandler(tag.id)} />
-
+                                            <Tag text={tag?.name} color={tag?.color} size='small' id={tag.id} onClick={() => addTagHandler(tag.id)} />
                                         </div>
                                     </DraggableDroppableTag>
+
                                     {tag.id === tagForEdit?.id && (
                                         <Image
                                             className={styles.threeDots}

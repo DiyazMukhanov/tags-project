@@ -3,7 +3,7 @@ import styles from './ColorCircle.module.css';
 
 type Props = {
     color: string
-    onClick: () => void
+    onClick: (event: React.MouseEvent) => void
 }
 
 export const ColorCircle = ({ color, onClick }: Props) => {

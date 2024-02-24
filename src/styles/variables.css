@@ -1,3 +1,24 @@
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/fonts/SF-Pro-Display-Bold.otf') format('opentype');
+    font-weight: 600;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: 'SF Pro Text';
+    src: url('/fonts/SFProText-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 :root {
     --color-white: #FFFFFF;
     --color-red: #F46262;
@@ -12,6 +33,9 @@
     --color-grey-100: #F5F5F5;
     --color-light-grey: #EDEDED;
 
+
     --brand-font: "SF Pro Display", -apple-system, "Muller", "BlinkMacSystemFont", Segoe UI, "Roboto", Oxygen,
+        Ubuntu, "Cantarell", Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    --brand-text-font: 'SF Pro Text', "SF Pro Display", -apple-system, "Muller", "BlinkMacSystemFont", Segoe UI, "Roboto", Oxygen,
         Ubuntu, "Cantarell", Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }

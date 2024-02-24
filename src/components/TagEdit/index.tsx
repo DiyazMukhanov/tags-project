@@ -7,6 +7,8 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { deleteTag, updateTag } from '../../store/slices/tagsSlice';
 import { createPortal } from "react-dom";
+import { TagInterface } from "@/store/slices/sliceTypes";
+import { Position } from "@/types/position";
 
 const colors = [
     {
@@ -43,45 +45,48 @@ const colors = [
     },
 ]
 
-export const TagEdit = ({ tag, setPosition }) => {
+type Props = {
+    tag: TagInterface | null
+    setPosition: (position: Position | null) => void
+}
+
+export const TagEdit = ({ tag, setPosition }: Props) => {
     const dispatch = useDispatch();
-    const [chosenId, setChosenId] = useState<number | null>(null)
-    const [etitableTag, setEditableTag] = useState(tag)
+    const [etitableTag, setEditableTag] = useState<TagInterface | null>(tag)
     const [currentColor, setCurrentColor] = useState(etitableTag?.color)
-    const [name, setName] = useState(etitableTag?.name)
-    const [circlePosition, setCirclePosition] = useState(null)
+    const [name, setName] = useState<string | undefined>(etitableTag?.name)
+    const [circlePosition, setCirclePosition] = useState<Position | null>(null)
 
     useEffect(() => {
-        updateTaghandler(name)
+        if (name) {
+            updateTaghandler(name)
+        }
     }, [name, currentColor])
 
-    // const circleClickHandler = (id: number) => {
-    //     setChosenId(id)
-    //     const color = colors.find(color => color.id === id)
-    //     setCurrentColor(color.color)
-    // }
-
-    const deleteTagHandler = (tagId) => {
+    const deleteTagHandler = (tagId: number | undefined) => {
         dispatch(deleteTag(tagId))
         setPosition(null)
     }
 
-    const onNameInputChangeHandler = (event) => {
+    const onNameInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-        updateTaghandler()
+        if (name) {
+            updateTaghandler(name)
+        }
+
     }
 
-    const updateTaghandler = (name) => {
-        dispatch(updateTag({ id: etitableTag.id, name: name, color: currentColor }))
+    const updateTaghandler = (name: string) => {
+        dispatch(updateTag({ id: etitableTag?.id, name: name, color: currentColor }))
     }
 
-    const onCircleClickHandler = (event: React.MouseEvent, color) => {
+    const onCircleClickHandler = (event: React.MouseEvent, color: string) => {
         setCurrentColor(color)
 
         const hoveredElement = event.currentTarget as HTMLElement
         setCirclePosition({
-            top: hoveredElement.getBoundingClientRect().top + window.scrollY - 3.2,
-            left: hoveredElement.getBoundingClientRect().left + window.scrollX - 3.2,
+            top: hoveredElement.getBoundingClientRect().top + window.scrollY - 3.3,
+            left: hoveredElement.getBoundingClientRect().left + window.scrollX - 3.33,
         });
     };
 
@@ -105,9 +110,7 @@ export const TagEdit = ({ tag, setPosition }) => {
                 <div className={styles.colorsContainer}>
                     {colors.map(color =>
                         <ColorCircle
-                            // chosen={chosenId === color.id && true}
                             color={color.color}
-                            // id={color.id}
                             onClick={(e) => onCircleClickHandler(e, color.color)}
                             key={color.id}
                         />

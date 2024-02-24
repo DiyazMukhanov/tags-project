@@ -27,6 +27,7 @@
 }
 
 .tableHeader {
+    font-family: var(--brand-text-font);
     font-size: 12px;
     font-weight: 400;
     line-height: 14.32px;
