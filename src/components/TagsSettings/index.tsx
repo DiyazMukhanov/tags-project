@@ -1,5 +1,5 @@
 import { Paper } from '@/UI/Paper';
-import styles from './TagsSettings.module.css';
+import styles from './tagsSettings.module.css';
 import Tag from '../Tag';
 import { TagInterface, RootState } from '@/store/slices/sliceTypes';
 import Image from 'next/image';
