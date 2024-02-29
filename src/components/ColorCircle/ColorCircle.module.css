@@ -1,17 +1,17 @@
-.circle {
+.container {
     position: relative;
-    width: 15px;
-    height: 15px;
+}
+
+.circle {
+    /* position: ; */
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .chosen {
     position: absolute;
-    top: -3px;
-    left: -2.7px;
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
-    border: 2px solid;
+    top: -4.1px;
+    left: -4.1px;
 }

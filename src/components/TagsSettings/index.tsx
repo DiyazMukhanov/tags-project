@@ -67,7 +67,7 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
         let collection = collections.filter(collection => collection.id === currentTagsCollectionId)[0]
         let newTags = getTagsList(tagsList, collection?.tagIds)
         setTags(newTags)
-    }, [collections])
+    }, [collections, tagsList])
 
     const onEditClickHandler = (event: React.MouseEvent) => {
         const hoveredElement = event.currentTarget as HTMLElement;
@@ -119,7 +119,11 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
                 onClose={() => setPosition(null)}
                 position={position}
             >
-                <TagEdit tag={tagForEdit} setPosition={setPosition} setInputValue={setInputValue} />
+                <TagEdit
+                    tag={tagForEdit}
+                    setPosition={setPosition}
+                    setInputValue={setInputValue}
+                />
             </ModalPositioned>
             <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
                 <Paper className={styles.container} radius='medium'>

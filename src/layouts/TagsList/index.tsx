@@ -38,9 +38,13 @@ export default function TagsList() {
     const collections = useSelector((state: RootState) => state.tags.collections);
     const collectionRefs = useRef<(HTMLDivElement | null)[]>([])
 
-    const onTagClickHandler = (event: React.MouseEvent, ids: number[], collectionId: number, index: number) => {
+    const updateAddedTags = (ids: number[]) => {
         let tags = getTagsList(tagsList, ids)
         setTags(tags)
+    }
+
+    const onTagClickHandler = (event: React.MouseEvent, ids: number[], collectionId: number, index: number) => {
+        updateAddedTags(ids)
         setCurrentTagsCollectionId(collectionId)
 
         const currentCollectionRef = collectionRefs.current[index]
@@ -51,8 +55,6 @@ export default function TagsList() {
                 left: left
             })
         }
-
-
     }
 
     return (
