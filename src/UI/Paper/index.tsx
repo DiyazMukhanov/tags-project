@@ -11,14 +11,15 @@ type Props = {
 export const Paper = ({
     children,
     radius = 'medium',
-    className
+    className,
 }: Props) => {
     return (
         <div className={classNames(
             className,
             styles.paper,
-            styles[radius]
-        )}>
+            styles[radius],
+        )}
+        >
             {children}
         </div>
     )

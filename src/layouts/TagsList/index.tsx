@@ -2,15 +2,15 @@ import { Paper } from "../../UI/Paper/index";
 import styles from './TagsList.module.css';
 import classNames from "classnames";
 import { TagCollection } from "./TagCollection";
-import { Modal } from "@/UI/Modal";
-import { useState } from "react";
-import { usePosition } from "@/utils/hooks/usePosition";
+import { ModalPositioned } from "@/UI/ModalPositioned";
+import { useRef, useState } from "react";
 import { TagsSettings } from "@/components/TagsSettings";
 import { getTagsList } from "@/utils/getTagsList";
 import { TagInterface } from "@/store/slices/sliceTypes";
 import { RootState } from "@/store/slices/sliceTypes";
 
 import { useSelector } from 'react-redux';
+import { Position } from "@/types/position";
 
 const TABLEHEADERS = [
     {
@@ -19,7 +19,7 @@ const TABLEHEADERS = [
         width: 'small'
     },
     {
-        title: 'Тэги',
+        title: 'Теги',
         id: 2,
         width: 'medium'
     },
@@ -31,32 +31,43 @@ const TABLEHEADERS = [
 ]
 
 export default function TagsList() {
-    const { position, setPosition, onMouseEventHandler } = usePosition()
+    const [collectionPosition, setCollectionPosition] = useState<Position | null>(null)
     const [tags, setTags] = useState<TagInterface[] | null>(null)
     const [currentTagsCollectionId, setCurrentTagsCollectionId] = useState<number | null>(null)
     const tagsList = useSelector((state: RootState) => state.tags.tags);
     const collections = useSelector((state: RootState) => state.tags.collections);
+    const collectionRefs = useRef<(HTMLDivElement | null)[]>([])
 
-    const onTagClickHandler = (event: React.MouseEvent, ids: number[], collectionId: number) => {
+    const onTagClickHandler = (event: React.MouseEvent, ids: number[], collectionId: number, index: number) => {
         let tags = getTagsList(tagsList, ids)
         setTags(tags)
-        onMouseEventHandler(event)
         setCurrentTagsCollectionId(collectionId)
+
+        const currentCollectionRef = collectionRefs.current[index]
+        if (currentCollectionRef) {
+            const { left, top } = currentCollectionRef.getBoundingClientRect()
+            setCollectionPosition({
+                top: top + 50,
+                left: left
+            })
+        }
+
+
     }
 
     return (
         <div>
-            <Modal
+            <ModalPositioned
                 className='modalContent'
-                onClose={() => setPosition(null)}
-                position={position}
+                onClose={() => setCollectionPosition(null)}
+                position={collectionPosition}
             >
                 <TagsSettings
                     tags={tags}
                     setTags={setTags}
                     currentTagsCollectionId={currentTagsCollectionId}
                 />
-            </Modal>
+            </ModalPositioned>
             <Paper radius="large" className={styles.container}>
                 <table className={styles.table}>
                     <thead>
@@ -71,8 +82,13 @@ export default function TagsList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {collections.map(collection => (
-                            <TagCollection key={collection.id} collectionItem={collection} onClick={(e) => onTagClickHandler(e, collection.tagIds, collection.id)} />
+                        {collections.map((collection, index) => (
+                            <TagCollection
+                                key={collection.id}
+                                collectionItem={collection}
+                                onClick={(e) => onTagClickHandler(e, collection.tagIds, collection.id, index)}
+                                ref={collection => collectionRefs.current[index] = collection}
+                            />
                         ))}
                     </tbody>
                 </table>

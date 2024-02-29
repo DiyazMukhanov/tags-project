@@ -5,15 +5,14 @@ import { TagInterface, RootState } from '@/store/slices/sliceTypes';
 import Image from 'next/image';
 import CancelButton from '../../../public/icons/closeTag.svg';
 import SixDots from './../../../public/icons/sixDots.svg';
-import Plus from './../../../public/icons/plus.svg';
 import ThreeDots from './../../../public/icons/threeDots.svg';
 import React, { useEffect, useState } from 'react';
-import { Modal } from '@/UI/Modal';
+import { ModalPositioned } from '@/UI/ModalPositioned';
 import { TagEdit } from '../TagEdit';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTagsList } from "@/utils/getTagsList";
-import { addTag, addTagToCollection, removeTagFromCollection, moveTagOrder } from '../../store/slices/tagsSlice';
+import { addTag, addTagToCollection, removeTagFromCollection, moveTagOrder, searchTags, clearFilteredTags } from '../../store/slices/tagsSlice';
 import { DndContext, useSensor, PointerSensor, MouseSensor } from '@dnd-kit/core';
 import { DragEndEvent } from '@dnd-kit/core';
 import { DraggableDroppableTag } from '@/UI/DraggableDroppable';
@@ -33,8 +32,10 @@ const getTagById = (tags: TagInterface[], tagId: number) => {
 
 export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) => {
     const dispatch = useDispatch();
-    const tagsList = useSelector((state: RootState) => state.tags.tags);
-    const collections = useSelector((state: RootState) => state.tags.collections);
+    const tagsList = useSelector((state: RootState) => state.tags.tags)
+    const collections = useSelector((state: RootState) => state.tags.collections)
+    const filteredTags = useSelector((state: RootState) => state.tags.filteredTags)
+
     const [position, setPosition] = useState<Position | null>(null);
     const [tagForEdit, setTagForEdit] = useState<TagInterface | null>(null)
     const [inputValue, setInputValue] = useState('')
@@ -64,7 +65,7 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
 
     useEffect(() => {
         let collection = collections.filter(collection => collection.id === currentTagsCollectionId)[0]
-        let newTags = getTagsList(tagsList, collection.tagIds)
+        let newTags = getTagsList(tagsList, collection?.tagIds)
         setTags(newTags)
     }, [collections])
 
@@ -90,7 +91,9 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
     }
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value)
+        const inputValue = event.target.value
+        setInputValue(inputValue)
+        dispatch(searchTags(inputValue))
     }
 
     const createTagHandler = () => {
@@ -98,22 +101,31 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
             return
         }
         dispatch(addTag({ name: inputValue, color: '#F46262' }))
+        dispatch(clearFilteredTags())
         setInputValue('')
+    }
+
+    const createButtonDisabledStatus = () => {
+        if (inputValue === '' || (filteredTags && filteredTags.length > 0)) {
+            return true
+        } else {
+            return false
+        }
     }
 
     return (
         <>
-            <Modal
+            <ModalPositioned
                 onClose={() => setPosition(null)}
                 position={position}
             >
-                <TagEdit tag={tagForEdit} setPosition={setPosition} />
-            </Modal>
+                <TagEdit tag={tagForEdit} setPosition={setPosition} setInputValue={setInputValue} />
+            </ModalPositioned>
             <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
                 <Paper className={styles.container} radius='medium'>
                     <div className={styles.top}>
                         {tags && tags.map(tag => (
-                            <Tag size='small' text={tag.name} color={tag.color} isShort={true} id={tag.id}>
+                            <Tag size='small' text={tag.name} color={tag.color} isShort={true} id={tag.id} key={tag.id}>
                                 <Image
                                     priority
                                     src={CancelButton}
@@ -130,20 +142,19 @@ export const TagsSettings = ({ tags, setTags, currentTagsCollectionId }: Props) 
                         />
                     </div>
                     <div className={styles.bottom}>
-                        <div
-                            className={styles.createTag}
+                        <button
+                            className={classNames(
+                                styles.createTag,
+                                { [styles.active]: createButtonDisabledStatus() === false }
+                            )}
                             onClick={createTagHandler}
+                            disabled={createButtonDisabledStatus()}
                         >
-                            <Image
-                                priority
-                                src={Plus}
-                                alt='plus'
-                            />
-                            Создать тэг
-                        </div>
+                            <span className={styles.plus}>+</span>
+                            Создать тег
+                        </button>
                         <div>
-                            {tagsList.map(tag => (
-
+                            {(filteredTags || tagsList).map(tag => (
                                 <div
                                     className={classNames(
                                         styles.tagBlock,

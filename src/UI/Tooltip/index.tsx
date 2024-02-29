@@ -2,6 +2,11 @@ import { usePosition } from '@/utils/hooks/usePosition';
 import { ReactNode, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+type UsePositionOptions = {
+    yOffset?: number
+    xOffset?: number
+};
+
 type Props = {
     content: ReactNode;
     children: (
@@ -9,10 +14,11 @@ type Props = {
         onMouseLeave: () => void,
     ) => JSX.Element
     className?: string
+    options?: UsePositionOptions
 };
 
-export function Tooltip({ children, content }: Props) {
-    const { position, setPosition, onMouseEventHandler } = usePosition()
+export function Tooltip({ children, content, options }: Props) {
+    const { position, setPosition, onMouseEventHandler } = usePosition(options)
 
     const onMouseEnterHandler = (event: React.MouseEvent) => {
         onMouseEventHandler(event)

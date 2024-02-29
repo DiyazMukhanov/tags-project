@@ -56,7 +56,8 @@ const initialTagsState: TagsStateInterface = {
             id: 123454,
             tagIds: [1, 2]
         },
-    ]
+    ],
+    filteredTags: null
 };
 
 const tagsSlice = createSlice({
@@ -89,9 +90,16 @@ const tagsSlice = createSlice({
                     collection.tagIds = collection.tagIds.filter(tagId => tagId !== tagIdToDelete);
                 });
             }
+
+            if (state.filteredTags) {
+                const filteredIndexToDelete = state.filteredTags.findIndex(tag => tag.id === tagIdToDelete)
+                if (filteredIndexToDelete !== -1) {
+                    state.filteredTags.splice(filteredIndexToDelete, 1)
+                }
+            }
         },
 
-        updateTag: (state, action: PayloadAction<{ id: number | undefined; name: string; color: string | undefined }>) => {
+        updateTag: (state, action: PayloadAction<{ id: number | undefined; name: string; color: string }>) => {
             const { id, name, color } = action.payload;
 
             const nameExists = state.tags.some(tag => tag.name === name && tag.id !== id);
@@ -105,6 +113,15 @@ const tagsSlice = createSlice({
             if (tagToUpdate && color) {
                 tagToUpdate.name = name;
                 tagToUpdate.color = color;
+            }
+
+            if (state.filteredTags) {
+                const filteredIndexToUpdate = state.filteredTags.findIndex(tag => tag.id === id)
+                if (filteredIndexToUpdate !== -1) {
+                    const filteredtagToUpdate = state.filteredTags[filteredIndexToUpdate]
+                    filteredtagToUpdate.name = name
+                    filteredtagToUpdate.color = color
+                }
             }
         },
 
@@ -156,9 +173,23 @@ const tagsSlice = createSlice({
             });
         },
 
+        searchTags: (state, action: PayloadAction<string>) => {
+            const searchText = action.payload.toLowerCase()
+
+            if (!searchText.trim()) {
+                state.filteredTags = state.tags
+            } else {
+                state.filteredTags = state.tags.filter(tag =>
+                    tag.name.toLowerCase().includes(searchText))
+            }
+        },
+
+        clearFilteredTags: (state) => {
+            state.filteredTags = null;
+        },
     }
 });
 
-export const { addTag, deleteTag, updateTag, addTagToCollection, removeTagFromCollection, moveTagOrder } = tagsSlice.actions;
+export const { addTag, deleteTag, updateTag, addTagToCollection, removeTagFromCollection, moveTagOrder, searchTags, clearFilteredTags } = tagsSlice.actions;
 
 export default tagsSlice.reducer;

@@ -13,6 +13,7 @@ export interface CollectionInterface {
 export interface TagsStateInterface {
     tags: TagInterface[];
     collections: CollectionInterface[];
+    filteredTags: TagInterface[] | null;
 }
 
 export interface RootState {

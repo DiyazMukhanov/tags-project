@@ -57,6 +57,8 @@
 .threeDots {
     cursor: pointer;
     height: 33px;
+    height: auto;
+    width: auto;
 }
 
 .invisibleInput {
@@ -68,4 +70,21 @@
     width: auto;
     height: 25px;
     padding: 4px 8px;
+}
+
+.createTag {
+    width: fit-content;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.active {
+    color: var(--color-blue-100);
+}
+
+.plus {
+    font-size: 18px;
 }

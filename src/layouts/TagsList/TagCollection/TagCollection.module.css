@@ -34,3 +34,10 @@
     gap: 8px;
     align-items: center;
 }
+
+.empty {
+    width: 202px;
+    display: flex;
+    cursor: pointer;
+    padding-left: 10px;
+}
